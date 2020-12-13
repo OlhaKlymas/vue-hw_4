@@ -1,17 +1,47 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+<!--    <Directives/>-->
+<!--    <SliderImg/>-->
+    <h1 ref="head">{{activeBtn}}</h1>
+    <div class="tabsBtn">
+      <btn-mixin v-for="(val, i) in tabs"
+                 :key="i"
+                 :label="val"
+                 :class="{active: activeBtn == val}"
+                 @mixinEvent="btnMixinHandler(curTab = i)"
+      ></btn-mixin>
+    </div>
+    <component :is="curTab"></component>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
+import Directives from "./components/Directives";
+import SliderImg from "./components/SliderImg";
+import BtnMixin from "./components/BtnMixin";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    BtnMixin,
+    Directives,
+    SliderImg
+  },
+  data(){
+    return{
+      curTab: 'directives',
+      tabs: {
+        directives: 'Directives',
+        sliderImg: 'Slider',
+      },
+      activeBtn: 'Directives',
+    }
+  },
+  methods: {
+    btnMixinHandler() {
+      console.log(`Hello from App component`)
+      this.activeBtn == this.tabs.directives ? this.activeBtn = this.tabs.sliderImg : this.activeBtn = this.tabs.directives
+    }
   }
 }
 </script>
@@ -19,10 +49,10 @@ export default {
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+}
+button.active{
+  background: bisque;
 }
 </style>
